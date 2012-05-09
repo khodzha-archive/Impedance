@@ -6,8 +6,4 @@ public class Calculator
   {
     MainFrame frame = new MainFrame();
   }
-
-  public static void calculate()
-  {
-  }
 }

@@ -57,7 +57,8 @@ class MainFrame extends JFrame implements ActionListener
   {
     if("calculate".equals(e.getActionCommand()))
     {
-      Calculator.calculate();
+      this.check();
+      this.calculate();
     }
     if("power".equals(e.getActionCommand()))
     {
@@ -99,6 +100,18 @@ class MainFrame extends JFrame implements ActionListener
       drawPanel.addMouseListener(unknown);
       new NewThread(this, unknown);
     }
+  }
+  
+  public void check()
+  {
+//TODO check chain
+    
+  }
+  
+  public void calculate()
+  {
+//TODO calculation
+    
   }
   
   static final int DEFAULT_WIDTH = 640;
