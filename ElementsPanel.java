@@ -2,7 +2,7 @@ import javax.swing.*;
 
 class ElementsPanel extends JPanel
 {
-  public ElementsPanel(/*MainFrame frame*/)
+  public ElementsPanel()
   {
     FrameButton PowerSupplyButton = new FrameButton("Power Supply");
     PowerSupplyButton.setActionCommand("power");
@@ -13,7 +13,5 @@ class ElementsPanel extends JPanel
     FrameButton CapacityButton = new FrameButton("Capacity");
     CapacityButton.setActionCommand("capacity");
     this.add(CapacityButton);
-    //this.add(new ElementsList());
-    //frame.getContentPane().add(this);
   }
 }

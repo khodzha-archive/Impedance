@@ -3,9 +3,8 @@ import java.awt.*;
 
 class DrawPanel extends JPanel
 {
-  public DrawPanel(MainFrame frame)
+  public DrawPanel()
   {
-//    this.setBackground(Color.white);
-    frame.add(this);
+    setBackground(Color.white);
   }
 }

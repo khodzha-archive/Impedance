@@ -7,7 +7,7 @@ class MainFrame extends JFrame
   {
     super("Impedance Calculator");
     FrameButton CalculateButton = new FrameButton("Calculate");
-    ElementsPanel elementPanel = new ElementsPanel(/*this*/);
+    ElementsPanel elementPanel = new ElementsPanel();
 
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,6 +22,9 @@ class MainFrame extends JFrame
     CalculateButton.setActionCommand("calculate");
 
     add(elementPanel, BorderLayout.EAST);
+
+    DrawPanel drawPanel = new DrawPanel();
+    add(drawPanel, BorderLayout.CENTER);
   }
  
   static final int DEFAULT_WIDTH = 640;
