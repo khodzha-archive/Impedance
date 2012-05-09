@@ -91,6 +91,14 @@ class MainFrame extends JFrame implements ActionListener
       drawPanel.addMouseListener(resistance);
       new NewThread(this, resistance);
     }
+    if("unknown".equals(e.getActionCommand()))
+    {
+      DisableButtons();
+      UnknownElement unknown= new UnknownElement();
+      array.add(unknown);
+      drawPanel.addMouseListener(unknown);
+      new NewThread(this, unknown);
+    }
   }
   
   static final int DEFAULT_WIDTH = 640;
