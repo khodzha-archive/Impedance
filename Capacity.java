@@ -7,7 +7,7 @@ class Capacity extends Element
   public Capacity()
   {
     String str = JOptionPane.showInputDialog("Enter capacity value");
-    double capacity = Double.parseDouble(str);
+    this.capacity = Double.parseDouble(str);
   }
 
   private double capacity;

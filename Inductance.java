@@ -7,7 +7,7 @@ class Inductance extends Element
   public Inductance()
   {
     String str = JOptionPane.showInputDialog("Enter inductance value");
-    double inductance = Double.parseDouble(str);
+    this.inductance = Double.parseDouble(str);
   }
 
   private double inductance;

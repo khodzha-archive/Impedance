@@ -7,7 +7,7 @@ class Resistance extends Element
   public Resistance()
   {
     String str = JOptionPane.showInputDialog("Enter resistance value");
-    double resistance = Double.parseDouble(str);
+    this.resistance = Double.parseDouble(str);
   }
 
   private double resistance;

@@ -8,6 +8,7 @@ class MainFrame extends JFrame implements ActionListener
   public MainFrame()
   {
     super("Impedance Calculator");
+    this.array = new ArrayList<Element>();
     this.CalculateButton = new FrameButton("Calculate");
     this.elementPanel = new ElementsPanel(this);
 

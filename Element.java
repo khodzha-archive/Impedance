@@ -7,7 +7,7 @@ class Element implements MouseListener
   {
   }
   
-  public void mouseClicked(MouseEvent e)
+  public void mousePressed(MouseEvent e)
   {
     if(first_x == 0 && first_y == 0)
     {
@@ -22,7 +22,7 @@ class Element implements MouseListener
   }
   
   public void mouseExited(MouseEvent e) {}
-  public void mousePressed(MouseEvent e) {}
+  public void mouseClicked(MouseEvent e) {}
   public void mouseEntered(MouseEvent e) {}
   public void mouseReleased(MouseEvent e) {}
 
