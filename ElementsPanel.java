@@ -4,17 +4,22 @@ class ElementsPanel extends JPanel
 {
   public ElementsPanel()
   {
-    FrameButton PowerSupplyButton = new FrameButton("Power Supply");
-    PowerSupplyButton.setActionCommand("power");
+    this.PowerSupplyButton = new FrameButton("Power Supply");
+    this.PowerSupplyButton.setActionCommand("power");
     this.add(PowerSupplyButton);
-    FrameButton ResistanceButton = new FrameButton("Resistance");
-    ResistanceButton.setActionCommand("resistance");
+    this.ResistanceButton = new FrameButton("Resistance");
+    this.ResistanceButton.setActionCommand("resistance");
     this.add(ResistanceButton);
-    FrameButton InductanceButton = new FrameButton("Inductance");
-    InductanceButton.setActionCommand("inductance");
+    this.InductanceButton = new FrameButton("Inductance");
+    this.InductanceButton.setActionCommand("inductance");
     this.add(InductanceButton);
-    FrameButton CapacityButton = new FrameButton("Capacity");
-    CapacityButton.setActionCommand("capacity");
+    this.CapacityButton = new FrameButton("Capacity");
+    this.CapacityButton.setActionCommand("capacity");
     this.add(CapacityButton);
   }
+  
+  private FrameButton PowerSupplyButton;
+  private FrameButton CapacityButton;
+  private FrameButton ResistanceButton;
+  private FrameButton InductanceButton;
 }

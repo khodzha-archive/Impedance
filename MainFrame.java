@@ -6,7 +6,7 @@ class MainFrame extends JFrame
   public MainFrame()
   {
     super("Impedance Calculator");
-    FrameButton CalculateButton = new FrameButton("Calculate");
+    this.CalculateButton = new FrameButton("Calculate");
     ElementsPanel elementPanel = new ElementsPanel();
 
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -17,9 +17,9 @@ class MainFrame extends JFrame
     buttonsPanel.add(CalculateButton);
     add(buttonsPanel, BorderLayout.SOUTH);
 
-    CalculateButton.setVerticalTextPosition(AbstractButton.CENTER);
-    CalculateButton.setHorizontalTextPosition(AbstractButton.LEADING);
-    CalculateButton.setActionCommand("calculate");
+    this.CalculateButton.setVerticalTextPosition(AbstractButton.CENTER);
+    this.CalculateButton.setHorizontalTextPosition(AbstractButton.LEADING);
+    this.CalculateButton.setActionCommand("calculate");
 
     add(elementPanel, BorderLayout.NORTH);
 
@@ -27,7 +27,7 @@ class MainFrame extends JFrame
     add(drawPanel, BorderLayout.CENTER);
   }
 
-  public static void DisableButtons()
+  public void DisableButtons()
   {
     CalculateButton.setText("Click where to place contacts of the element");
     PowerSupplyButton.setEnabled(false);
@@ -38,4 +38,7 @@ class MainFrame extends JFrame
   }
   static final int DEFAULT_WIDTH = 640;
   static final int DEFAULT_HEIGHT = 480;
+  
+  private FrameButton CalculateButton;
+
 }

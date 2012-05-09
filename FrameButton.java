@@ -18,7 +18,7 @@ class FrameButton extends JButton implements ActionListener
     }
     if("power".equals(e.getActionCommand()))
     {
-      MainFrame.DisableButtons();
+      DisableButtons();
       DrawPanel.addMouseListener();
       PowerSupply power = new PowerSupply();
       array.add(power);
