@@ -1,26 +1,27 @@
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
 
 class MainFrame extends JFrame
 {
   public MainFrame()
   {
+    super("Impedance Calculator");
+    FrameButton CalculateButton = new FrameButton("Calculate");
+    ElementsPanel elementPanel = new ElementsPanel(/*this*/);
+
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setTitle("Impedance Calculator");
     this.setVisible(true);
 
-    ElementsPanel elementPanel = new ElementsPanel(this);
-    this.setContentPane(elementPanel);
+    JPanel buttonsPanel = new JPanel(new FlowLayout());
+    buttonsPanel.add(CalculateButton);
+    add(buttonsPanel, BorderLayout.SOUTH);
 
-    DrawPanel schemaPanel = new DrawPanel(this);
-    this.setContentPane(schemaPanel);
-
-    FrameButton CalculateButton = new FrameButton("Calculate");
     CalculateButton.setVerticalTextPosition(AbstractButton.CENTER);
     CalculateButton.setHorizontalTextPosition(AbstractButton.LEADING);
-    CalculateButton.setActionCommand("calculate");  
-    this.getContentPane().add(CalculateButton);
+    CalculateButton.setActionCommand("calculate");
+
+    add(elementPanel, BorderLayout.EAST);
   }
  
   static final int DEFAULT_WIDTH = 640;
