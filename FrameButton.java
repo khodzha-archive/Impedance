@@ -6,6 +6,5 @@ class FrameButton extends JButton
   public FrameButton(String title)
   {
     this.setText(title);
-    this.addActionListener(frame);
   }
 }

@@ -9,7 +9,7 @@ class MainFrame extends JFrame implements ActionListener
   {
     super("Impedance Calculator");
     this.CalculateButton = new FrameButton("Calculate");
-    this.elementPanel = new ElementsPanel();
+    this.elementPanel = new ElementsPanel(this);
 
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,11 +22,12 @@ class MainFrame extends JFrame implements ActionListener
     this.CalculateButton.setVerticalTextPosition(AbstractButton.CENTER);
     this.CalculateButton.setHorizontalTextPosition(AbstractButton.LEADING);
     this.CalculateButton.setActionCommand("calculate");
+    this.CalculateButton.addActionListener(this);
 
-    add(elementPanel, BorderLayout.NORTH);
+    add(this.elementPanel, BorderLayout.NORTH);
 
-    drawPanel = new DrawPanel();
-    add(drawPanel, BorderLayout.CENTER);
+    this.drawPanel = new DrawPanel();
+    add(this.drawPanel, BorderLayout.CENTER);
   }
 
   public void DisableButtons()
@@ -34,6 +35,13 @@ class MainFrame extends JFrame implements ActionListener
     CalculateButton.setText("Click where to place contacts of the element");
     CalculateButton.setEnabled(false);
     elementPanel.DisableButtons();
+  }
+  
+  public void EnableButtons()
+  {
+    CalculateButton.setText("Click where to place contacts of the element");
+    CalculateButton.setEnabled(false);
+    elementPanel.EnableButtons();
   }
   
   public void actionPerformed(ActionEvent e)
@@ -45,30 +53,46 @@ class MainFrame extends JFrame implements ActionListener
     if("power".equals(e.getActionCommand()))
     {
       DisableButtons();
-      DrawPanel.addMouseListener();
       PowerSupply power = new PowerSupply();
       array.add(power);
+      drawPanel.addMouseListener(power);
+      while(power.isPlaced() != true) ;
+      drawPanel.removeMouseListener(power);
+      power.Draw();
+      EnableButtons();
     }
     if("inductance".equals(e.getActionCommand()))
     {
       DisableButtons();
-      DrawPanel.addMouseListener();
       Inductance inductance = new Inductance();
       array.add(inductance);
+      drawPanel.addMouseListener(inductance);
+      while(inductance.isPlaced() != true) ;
+      drawPanel.removeMouseListener(inductance);
+      inductance.Draw();
+      EnableButtons();
     }
     if("capacity".equals(e.getActionCommand()))
     {
       DisableButtons();
-      DrawPanel.addMouseListener();
       Capacity capacity = new Capacity();
       array.add(capacity);
+      drawPanel.addMouseListener(capacity);
+      while(capacity.isPlaced() != true) ;
+      drawPanel.removeMouseListener(capacity);
+      capacity.Draw();
+      EnableButtons();
     }
     if("resistance".equals(e.getActionCommand()))
     {
       DisableButtons();
-      DrawPanel.addMouseListener();
       Resistance resistance = new Resistance();
       array.add(resistance);
+      drawPanel.addMouseListener(resistance);
+      while(resistance.isPlaced() != true) ;
+      drawPanel.removeMouseListener(resistance);
+      resistance.Draw();
+      EnableButtons();
     }
   }
   
