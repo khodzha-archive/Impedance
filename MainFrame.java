@@ -31,6 +31,9 @@ class MainFrame extends JFrame implements ActionListener
     add(this.drawPanel, BorderLayout.CENTER);
   }
 
+  public DrawPanel getdrawPanel() { return this.drawPanel; }
+  public ArrayList<Element> getElements() { return this.array; }
+  
   public void DisableButtons()
   {
     CalculateButton.setText("Click where to place contacts of the element");
@@ -38,10 +41,15 @@ class MainFrame extends JFrame implements ActionListener
     elementPanel.DisableButtons();
   }
   
+  public void delMouseListener(Element element)
+  {
+    drawPanel.removeMouseListener(element);
+  }
+  
   public void EnableButtons()
   {
-    CalculateButton.setText("Click where to place contacts of the element");
-    CalculateButton.setEnabled(false);
+    CalculateButton.setText("Calculate");
+    CalculateButton.setEnabled(true);
     elementPanel.EnableButtons();
   }
   
@@ -57,10 +65,7 @@ class MainFrame extends JFrame implements ActionListener
       PowerSupply power = new PowerSupply();
       array.add(power);
       drawPanel.addMouseListener(power);
-      while(power.isPlaced() != true) ;
-      drawPanel.removeMouseListener(power);
-      power.Draw();
-      EnableButtons();
+      new NewThread(this, power);
     }
     if("inductance".equals(e.getActionCommand()))
     {
@@ -68,10 +73,7 @@ class MainFrame extends JFrame implements ActionListener
       Inductance inductance = new Inductance();
       array.add(inductance);
       drawPanel.addMouseListener(inductance);
-      while(inductance.isPlaced() != true) ;
-      drawPanel.removeMouseListener(inductance);
-      inductance.Draw();
-      EnableButtons();
+      new NewThread(this, inductance);
     }
     if("capacity".equals(e.getActionCommand()))
     {
@@ -79,10 +81,7 @@ class MainFrame extends JFrame implements ActionListener
       Capacity capacity = new Capacity();
       array.add(capacity);
       drawPanel.addMouseListener(capacity);
-      while(capacity.isPlaced() != true) ;
-      drawPanel.removeMouseListener(capacity);
-      capacity.Draw();
-      EnableButtons();
+      new NewThread(this, capacity);
     }
     if("resistance".equals(e.getActionCommand()))
     {
@@ -90,10 +89,7 @@ class MainFrame extends JFrame implements ActionListener
       Resistance resistance = new Resistance();
       array.add(resistance);
       drawPanel.addMouseListener(resistance);
-      while(resistance.isPlaced() != true) ;
-      drawPanel.removeMouseListener(resistance);
-      resistance.Draw();
-      EnableButtons();
+      new NewThread(this, resistance);
     }
   }
   

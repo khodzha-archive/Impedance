@@ -3,7 +3,7 @@ import java.awt.event.*;
 
 class Element implements MouseListener
 {
-  public void Draw()
+  public void Draw(Graphics g)
   {
   }
   
@@ -20,6 +20,11 @@ class Element implements MouseListener
       this.second_y = e.getY();
     }
   }
+  
+  public int getfirstX() { return this.first_x; }
+  public int getfirstY() { return this.first_y; }
+  public int getsecondX() { return this.second_x; }
+  public int getsecondY() { return this.second_y; }
   
   public void mouseExited(MouseEvent e) {}
   public void mouseClicked(MouseEvent e) {}
