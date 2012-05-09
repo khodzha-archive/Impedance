@@ -1,15 +1,15 @@
+import javax.swing.*;
+import java.text.*;
+import java.lang.*;
+
 class PowerSupply extends Element
 {
   public PowerSupply()
   {
     String str = JOptionPane.showInputDialog("Enter maximum voltage");
-    NumberFormat fmt = NumberFormat.getInstance();
-    Number num = fmt.parse(str);
-    double voltage_max = num.doubleValue();
-    String str = JOptionPane.showInputDialog("Enter frequency");
-    NumberFormat fmt = NumberFormat.getInstance();
-    Number num = fmt.parse(str);
-    double frequency = num.doubleValue();
+    double voltage_max = Double.parseDouble(str);
+    str = JOptionPane.showInputDialog("Enter frequency");
+    double frequency = Double.parseDouble(str);
   }
 
   private double voltage_max;

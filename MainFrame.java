@@ -26,7 +26,16 @@ class MainFrame extends JFrame
     DrawPanel drawPanel = new DrawPanel();
     add(drawPanel, BorderLayout.CENTER);
   }
- 
+
+  public static void DisableButtons()
+  {
+    CalculateButton.setText("Click where to place contacts of the element");
+    PowerSupplyButton.setEnabled(false);
+    ResistanceButton.setEnabled(false);
+    CapacityButton.setEnabled(false);
+    CalculateButton.setEnabled(false);
+    InductanceButton.setEnabled(false);
+  }
   static final int DEFAULT_WIDTH = 640;
   static final int DEFAULT_HEIGHT = 480;
 }

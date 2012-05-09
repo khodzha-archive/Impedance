@@ -1,11 +1,13 @@
+import javax.swing.*;
+import java.text.*;
+import java.lang.*;
+
 class Resistance extends Element
 {
   public Resistance()
   {
     String str = JOptionPane.showInputDialog("Enter resistance value");
-    NumberFormat fmt = NumberFormat.getInstance();
-    Number num = fmt.parse(str);
-    double resistance = num.doubleValue();
+    double resistance = Double.parseDouble(str);
   }
 
   private double resistance;
