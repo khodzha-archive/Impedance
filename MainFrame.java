@@ -1,13 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
-class MainFrame extends JFrame
+class MainFrame extends JFrame implements ActionListener
 {
   public MainFrame()
   {
     super("Impedance Calculator");
     this.CalculateButton = new FrameButton("Calculate");
-    ElementsPanel elementPanel = new ElementsPanel();
+    this.elementPanel = new ElementsPanel();
 
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,22 +25,58 @@ class MainFrame extends JFrame
 
     add(elementPanel, BorderLayout.NORTH);
 
-    DrawPanel drawPanel = new DrawPanel();
+    drawPanel = new DrawPanel();
     add(drawPanel, BorderLayout.CENTER);
   }
 
   public void DisableButtons()
   {
     CalculateButton.setText("Click where to place contacts of the element");
-    PowerSupplyButton.setEnabled(false);
-    ResistanceButton.setEnabled(false);
-    CapacityButton.setEnabled(false);
     CalculateButton.setEnabled(false);
-    InductanceButton.setEnabled(false);
+    elementPanel.DisableButtons();
   }
+  
+  public void actionPerformed(ActionEvent e)
+  {
+    if("calculate".equals(e.getActionCommand()))
+    {
+      Calculator.calculate();
+    }
+    if("power".equals(e.getActionCommand()))
+    {
+      DisableButtons();
+      DrawPanel.addMouseListener();
+      PowerSupply power = new PowerSupply();
+      array.add(power);
+    }
+    if("inductance".equals(e.getActionCommand()))
+    {
+      DisableButtons();
+      DrawPanel.addMouseListener();
+      Inductance inductance = new Inductance();
+      array.add(inductance);
+    }
+    if("capacity".equals(e.getActionCommand()))
+    {
+      DisableButtons();
+      DrawPanel.addMouseListener();
+      Capacity capacity = new Capacity();
+      array.add(capacity);
+    }
+    if("resistance".equals(e.getActionCommand()))
+    {
+      DisableButtons();
+      DrawPanel.addMouseListener();
+      Resistance resistance = new Resistance();
+      array.add(resistance);
+    }
+  }
+  
   static final int DEFAULT_WIDTH = 640;
   static final int DEFAULT_HEIGHT = 480;
   
   private FrameButton CalculateButton;
-
+  private ElementsPanel elementPanel;
+  private DrawPanel drawPanel;
+  private  ArrayList<Element> array;
 }

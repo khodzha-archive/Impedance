@@ -18,6 +18,14 @@ class ElementsPanel extends JPanel
     this.add(CapacityButton);
   }
   
+  public void DisableButtons()
+  {
+    PowerSupplyButton.setEnabled(false);
+    CapacityButton.setEnabled(false);
+    ResistanceButton.setEnabled(false);
+    InductanceButton.setEnabled(false);
+  }
+  
   private FrameButton PowerSupplyButton;
   private FrameButton CapacityButton;
   private FrameButton ResistanceButton;
