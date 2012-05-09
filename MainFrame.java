@@ -21,7 +21,7 @@ class MainFrame extends JFrame
     CalculateButton.setHorizontalTextPosition(AbstractButton.LEADING);
     CalculateButton.setActionCommand("calculate");
 
-    add(elementPanel, BorderLayout.EAST);
+    add(elementPanel, BorderLayout.NORTH);
 
     DrawPanel drawPanel = new DrawPanel();
     add(drawPanel, BorderLayout.CENTER);
