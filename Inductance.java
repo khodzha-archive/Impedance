@@ -10,6 +10,7 @@ class Inductance extends Element
   {
     String str = JOptionPane.showInputDialog("Enter inductance value");
     this.inductance = Double.parseDouble(str);
+    this.impedance = new Complex(0.0, -this.inductance);
   }
   
   public void Draw(Graphics g)

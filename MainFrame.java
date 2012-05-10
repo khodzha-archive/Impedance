@@ -34,6 +34,8 @@ class MainFrame extends JFrame implements ActionListener
 
     this.drawPanel = new DrawPanel();
     add(this.drawPanel, BorderLayout.CENTER);
+    
+    total_impedance = new Complex(0.0, 0.0);
   }
 
   public DrawPanel getdrawPanel() { return this.drawPanel; }
@@ -65,10 +67,13 @@ class MainFrame extends JFrame implements ActionListener
       if(this.check() == true)
       {
         this.calculate();
+        textField.setText(total_impedance.toString());
+        textField.setVisible(true);
       }
       else
       {
         textField.setVisible(true);
+//TODO: reset drawPanel and clear array
       }
     }
     if("power".equals(e.getActionCommand()))
@@ -107,7 +112,6 @@ class MainFrame extends JFrame implements ActionListener
   
   public boolean check()
   {
-//TODO check chain
     boolean withPowerSupply = false;
     for(Element elem : array)
     {
@@ -132,8 +136,9 @@ class MainFrame extends JFrame implements ActionListener
         this.textField.setText("Chain is broken");
         return false;
       }
-      if(true/*SET CONDITION  Element.type == PowerSupply*/)
+      if(elem.getClass().getName().equals("PowerSupply"))
       {
+        power_element_index = array.indexOf(elem);
         withPowerSupply = true;
       }
     }
@@ -148,7 +153,59 @@ class MainFrame extends JFrame implements ActionListener
   public void calculate()
   {
 //TODO calculation
-    
+    double frequency = ((PowerSupply)array.get(power_element_index)).getFrequency();
+    int array_length = array.size();
+    for(int i =0; i < array_length; i++)
+    {
+      findParallelConnection();
+    }
+    sumFinalImpedance();
+  }
+  
+  public void findParallelConnection()
+  {
+    for(Element elem1 : array)
+    {
+      for(Element elem2 : array)
+      {
+        if(elem1 != elem2 && elem1.getClass().getName().equals("PowerSupply") == false && elem2.getClass().getName().equals("PowerSupply") == false)
+        {
+          if((Math.pow((elem1.getfirstX()-elem2.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem2.getfirstY()),2)) < 25 &&
+            (Math.pow((elem1.getsecondX()-elem2.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem2.getsecondY()),2)) < 25)
+          {
+            parallel1 = elem1;
+            parallel2 = elem2;
+            replaceParallelConnection();
+            parallel1 = null;
+            parallel2 = null;
+          }
+          else if((Math.pow((elem1.getfirstX()-elem2.getsecondX()),2) + Math.pow((elem1.getfirstY()-elem2.getsecondY()),2)) < 25 &&
+            (Math.pow((elem1.getsecondX()-elem2.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem2.getfirstY()),2)) < 25)
+          {
+            parallel1 = elem1;
+            parallel2 = elem2;
+            replaceParallelConnection();
+            parallel1 = null;
+            parallel2 = null;
+          }
+        }
+      }
+    }
+  }
+  
+  public void replaceParallelConnection()
+  {
+    parallel1.setImpedance(parallel1.getImpedance().add(parallel2.getImpedance()));
+    array.remove(parallel2);
+    array.trimToSize();
+  }
+  
+  public void sumFinalImpedance()
+  {
+    for(Element elem : array)
+    {
+      total_impedance.add(elem.getImpedance()) ;
+    }
   }
   
   static final int DEFAULT_WIDTH = 640;
@@ -159,4 +216,8 @@ class MainFrame extends JFrame implements ActionListener
   private ElementsPanel elementPanel;
   private DrawPanel drawPanel;
   private  ArrayList<Element> array;
+  private int power_element_index;
+  private Element parallel1;
+  private Element parallel2;
+  private Complex total_impedance;
 }

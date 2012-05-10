@@ -10,6 +10,7 @@ class Resistance extends Element
   {
     String str = JOptionPane.showInputDialog("Enter resistance value");
     this.resistance = Double.parseDouble(str);
+    this.impedance = new Complex(this.resistance, 0.0);
   }
 
   public void Draw(Graphics g)

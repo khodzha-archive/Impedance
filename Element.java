@@ -31,6 +31,9 @@ class Element implements MouseListener
   public void setfirstContact(boolean flag) { first_contact_connected = flag;}
   public void setsecondContact(boolean flag) { second_contact_connected = flag;}
   
+  public void setImpedance(Complex num) { this.impedance = num;}
+  public Complex getImpedance() { return this.impedance; }
+  
   public void mouseExited(MouseEvent e) {}
   public void mouseClicked(MouseEvent e) {}
   public void mouseEntered(MouseEvent e) {}
@@ -47,4 +50,5 @@ class Element implements MouseListener
   private int second_x, second_y;
   private boolean first_contact_connected = false;
   private boolean second_contact_connected = false;
+  protected Complex impedance;
 }

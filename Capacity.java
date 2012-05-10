@@ -10,6 +10,7 @@ class Capacity extends Element
   {
     String str = JOptionPane.showInputDialog("Enter capacity value");
     this.capacity = Double.parseDouble(str);
+    this.impedance = new Complex(0.0, -1.0/this.capacity);
   }
 
   public void Draw(Graphics g)

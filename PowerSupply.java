@@ -12,7 +12,10 @@ class PowerSupply extends Element
     this.voltage_max = Double.parseDouble(str);
     str = JOptionPane.showInputDialog("Enter frequency");
     this.frequency = Double.parseDouble(str);
+    this.impedance = new Complex(0.0, 0.0);
   }
+  
+  public double getFrequency() { return this.frequency; }
   
   public void Draw(Graphics g)
   {
