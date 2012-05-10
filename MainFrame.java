@@ -67,13 +67,12 @@ class MainFrame extends JFrame implements ActionListener
       if(this.check() == true)
       {
         this.calculate();
-        textField.setText(total_impedance.toString());
         textField.setVisible(true);
+        textField.setText(this.total_impedance.toString());
       }
       else
       {
         textField.setVisible(true);
-//TODO: reset drawPanel and clear array
       }
     }
     if("power".equals(e.getActionCommand()))
@@ -152,7 +151,6 @@ class MainFrame extends JFrame implements ActionListener
     
   public void calculate()
   {
-//TODO calculation
     double frequency = ((PowerSupply)array.get(power_element_index)).getFrequency();
     int array_length = array.size();
     for(int i =0; i < array_length; i++)
@@ -295,7 +293,11 @@ class MainFrame extends JFrame implements ActionListener
   
   public void replaceParallelConnection()
   {
-    parallel1.setImpedance(parallel1.getImpedance().add(parallel2.getImpedance())); //TODO REWRITE to parallel connection
+    Complex num = new Complex(1.0, 0.0);
+    Complex a = num.div(parallel1.getImpedance());
+    Complex b = num.div(parallel2.getImpedance());
+    a = a.add(b);
+    parallel1.setImpedance(num.div(a)); //TODO REWRITE to parallel connection
     array.remove(parallel2);
     array.trimToSize();
   }
