@@ -157,9 +157,94 @@ class MainFrame extends JFrame implements ActionListener
     int array_length = array.size();
     for(int i =0; i < array_length; i++)
     {
+      findConsequentConnection();
+    }
+    array_length = array.size();
+    for(int i =0; i < array_length; i++)
+    {
       findParallelConnection();
     }
     sumFinalImpedance();
+  }
+  
+  public void findConsequentConnection()
+  {
+     for(Element elem1 : array)
+    {
+      for(Element elem2 : array)
+      {
+        if(elem1 != elem2 && elem1.getClass().getName().equals("PowerSupply") == false && elem2.getClass().getName().equals("PowerSupply") == false)
+        {
+          if((Math.pow((elem1.getfirstX()-elem2.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem2.getfirstY()),2)) < 25 &&
+            (Math.pow((elem1.getsecondX()-elem2.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem2.getsecondY()),2)) > 25)
+          {
+            for(Element elem3 : array)
+            {
+              if((Math.pow((elem1.getfirstX()-elem3.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem3.getfirstY()),2)) < 25 )
+              {
+                return ;
+              }
+            }
+            serial1 = elem1;
+            serial2 = elem2;
+            replaceConsequentConnection();
+            serial1 = null;
+            serial2 = null;
+          }
+           else if((Math.pow((elem1.getfirstX()-elem2.getsecondX()),2) + Math.pow((elem1.getfirstY()-elem2.getsecondY()),2)) < 25 &&
+            (Math.pow((elem1.getsecondX()-elem2.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem2.getfirstY()),2)) > 25)
+          {
+            for(Element elem3 : array)
+            {
+              if((Math.pow((elem1.getfirstX()-elem3.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem3.getfirstY()),2)) < 25  ||
+                (Math.pow((elem1.getfirstX()-elem3.getsecondX()),2) + Math.pow((elem1.getfirstY()-elem3.getsecondY()),2)) < 25)
+              {
+                return ;
+              }
+            }
+            serial1 = elem1;
+            serial2 = elem2;
+            replaceConsequentConnection();
+            serial1 = null;
+            serial2 = null;
+          }
+           else if((Math.pow((elem1.getsecondX()-elem2.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem2.getsecondY()),2)) < 25 &&
+            (Math.pow((elem1.getfirstX()-elem2.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem2.getfirstY()),2)) > 25)
+          {
+            for(Element elem3 : array)
+            {
+              if((Math.pow((elem1.getsecondX()-elem3.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem3.getfirstY()),2)) < 25 ||
+                (Math.pow((elem1.getsecondX()-elem3.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem3.getsecondY()),2)) < 25)
+              {
+                return ;
+              }
+            }
+            serial1 = elem1;
+            serial2 = elem2;
+            replaceConsequentConnection();
+            serial1 = null;
+            serial2 = null;
+          }
+          else if((Math.pow((elem1.getsecondX()-elem2.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem2.getfirstY()),2)) < 25 &&
+            (Math.pow((elem1.getfirstX()-elem2.getsecondX()),2) + Math.pow((elem1.getfirstY()-elem2.getsecondY()),2)) > 25)
+          {
+            for(Element elem3 : array)
+            {
+              if((Math.pow((elem1.getsecondX()-elem3.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem3.getfirstY()),2)) < 25 ||
+                (Math.pow((elem1.getsecondX()-elem3.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem3.getsecondY()),2)) < 25)
+              {
+                return ;
+              }
+            }
+            serial1 = elem1;
+            serial2 = elem2;
+            replaceConsequentConnection();
+            serial1 = null;
+            serial2 = null;
+          }
+        }
+      }
+    }
   }
   
   public void findParallelConnection()
@@ -193,9 +278,24 @@ class MainFrame extends JFrame implements ActionListener
     }
   }
   
+  public void replaceConsequentConnection()
+  {
+    serial1.setImpedance(serial1.getImpedance().add(serial2.getImpedance()));
+    if(Math.abs(serial1.getfirstX()-serial2.getfirstX())<5)
+      serial1.setsecondX(serial2.getsecondX());
+    else if(Math.abs(serial1.getfirstX()-serial2.getsecondX())<5)
+      serial1.setsecondX(serial2.getfirstX());
+    else if(Math.abs(serial1.getsecondX()-serial2.getfirstX())<5)
+      serial1.setfirstX(serial2.getsecondX());
+    else if(Math.abs(serial1.getsecondX()-serial2.getsecondX())<5)
+      serial1.setfirstX(serial2.getfirstX());
+    array.remove(parallel2);
+    array.trimToSize();
+  }
+  
   public void replaceParallelConnection()
   {
-    parallel1.setImpedance(parallel1.getImpedance().add(parallel2.getImpedance()));
+    parallel1.setImpedance(parallel1.getImpedance().add(parallel2.getImpedance())); //TODO REWRITE to parallel connection
     array.remove(parallel2);
     array.trimToSize();
   }
@@ -204,7 +304,7 @@ class MainFrame extends JFrame implements ActionListener
   {
     for(Element elem : array)
     {
-      total_impedance.add(elem.getImpedance()) ;
+      this.total_impedance = this.total_impedance.add(elem.getImpedance()) ;
     }
   }
   
@@ -219,5 +319,7 @@ class MainFrame extends JFrame implements ActionListener
   private int power_element_index;
   private Element parallel1;
   private Element parallel2;
+  private Element serial1;
+  private Element serial2;
   private Complex total_impedance;
 }

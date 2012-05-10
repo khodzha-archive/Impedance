@@ -26,6 +26,11 @@ class Element implements MouseListener
   public int getsecondX() { return this.second_x; }
   public int getsecondY() { return this.second_y; }
   
+  public void setfirstX(int c) { this.first_x = c; }
+  public void setfirstY(int c) { this.first_y = c; }
+  public void setsecondX(int c) { this.second_x = c; }
+  public void setsecondY(int c) { this.second_y = c; }
+  
   public boolean getfirstContact() { return first_contact_connected; }
   public boolean getsecondContact() { return second_contact_connected; }
   public void setfirstContact(boolean flag) { first_contact_connected = flag;}
