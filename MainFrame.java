@@ -12,12 +12,17 @@ class MainFrame extends JFrame implements ActionListener
     this.CalculateButton = new FrameButton("Calculate");
     this.elementPanel = new ElementsPanel(this);
 
+    this.textField = new JTextField();
+    textField.setVisible(false);
+    
     setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setVisible(true);
 
     JPanel buttonsPanel = new JPanel(new FlowLayout());
     buttonsPanel.add(CalculateButton);
+    buttonsPanel.add(textField);
+    textField.setEditable(false);
     add(buttonsPanel, BorderLayout.SOUTH);
 
     this.CalculateButton.setVerticalTextPosition(AbstractButton.CENTER);
@@ -57,8 +62,14 @@ class MainFrame extends JFrame implements ActionListener
   {
     if("calculate".equals(e.getActionCommand()))
     {
-      this.check();
-      this.calculate();
+      if(this.check() == true)
+      {
+        this.calculate();
+      }
+      else
+      {
+        textField.setVisible(true);
+      }
     }
     if("power".equals(e.getActionCommand()))
     {
@@ -92,22 +103,48 @@ class MainFrame extends JFrame implements ActionListener
       drawPanel.addMouseListener(resistance);
       new NewThread(this, resistance);
     }
-    if("unknown".equals(e.getActionCommand()))
-    {
-      DisableButtons();
-      UnknownElement unknown= new UnknownElement();
-      array.add(unknown);
-      drawPanel.addMouseListener(unknown);
-      new NewThread(this, unknown);
-    }
   }
   
-  public void check()
+  public boolean check()
   {
 //TODO check chain
-    
+    boolean withPowerSupply = false;
+    for(Element elem : array)
+    {
+      for(Element comparison : array)
+      {
+        if( comparison != elem )
+        {
+          if((Math.pow((elem.getfirstX()-comparison.getfirstX()),2) + Math.pow((elem.getfirstY()-comparison.getfirstY()),2)) < 25 ||
+            (Math.pow((elem.getfirstX()-comparison.getsecondX()),2) + Math.pow((elem.getfirstY()-comparison.getsecondY()),2)) < 25)
+          {
+            elem.setfirstContact(true);
+          }
+          if((Math.pow((elem.getsecondX()-comparison.getfirstX()),2) + Math.pow((elem.getsecondY()-comparison.getfirstY()),2)) < 25 ||
+            (Math.pow((elem.getsecondX()-comparison.getsecondX()),2) + Math.pow((elem.getsecondY()-comparison.getsecondY()),2)) < 25)
+          {
+            elem.setsecondContact(true);
+          }
+        }
+      }
+      if(elem.getfirstContact() == false || elem.getsecondContact() == false)
+      {
+        this.textField.setText("Chain is broken");
+        return false;
+      }
+      if(true/*SET CONDITION  Element.type == PowerSupply*/)
+      {
+        withPowerSupply = true;
+      }
+    }
+    if(withPowerSupply == false)
+      {
+        this.textField.setText("No PowerSupply");
+        return false;
+      }
+    return true;
   }
-  
+    
   public void calculate()
   {
 //TODO calculation
@@ -117,6 +154,7 @@ class MainFrame extends JFrame implements ActionListener
   static final int DEFAULT_WIDTH = 640;
   static final int DEFAULT_HEIGHT = 480;
   
+  private JTextField textField;
   private FrameButton CalculateButton;
   private ElementsPanel elementPanel;
   private DrawPanel drawPanel;

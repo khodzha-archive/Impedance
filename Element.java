@@ -26,6 +26,11 @@ class Element implements MouseListener
   public int getsecondX() { return this.second_x; }
   public int getsecondY() { return this.second_y; }
   
+  public boolean getfirstContact() { return first_contact_connected; }
+  public boolean getsecondContact() { return second_contact_connected; }
+  public void setfirstContact(boolean flag) { first_contact_connected = flag;}
+  public void setsecondContact(boolean flag) { second_contact_connected = flag;}
+  
   public void mouseExited(MouseEvent e) {}
   public void mouseClicked(MouseEvent e) {}
   public void mouseEntered(MouseEvent e) {}
@@ -40,4 +45,6 @@ class Element implements MouseListener
   
   private int first_x, first_y;
   private int second_x, second_y;
+  private boolean first_contact_connected = false;
+  private boolean second_contact_connected = false;
 }

@@ -23,11 +23,6 @@ class ElementsPanel extends JPanel
     this.CapacityButton.setActionCommand("capacity");
     this.add(this.CapacityButton);
     this.CapacityButton.addActionListener(frame);
-
-    this.UnknownElementButton = new FrameButton("Unknown");
-    this.UnknownElementButton.setActionCommand("unknown");
-    this.add(this.UnknownElementButton);
-    this.UnknownElementButton.addActionListener(frame);
   }
   
   public ElementsPanel()
