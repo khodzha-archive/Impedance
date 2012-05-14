@@ -224,15 +224,18 @@ top:for(Element elem1 : array)
   
   public void replaceParallel(Element elem1, Element elem2)
   {
+    Complex unit = new Complex (1, 0);
     Complex num1 = new Complex (1, 0);
     Complex num2 = new Complex (1, 0);
     num1 = num1.div(elem1.getImpedance());
     num2 = num2.div(elem2.getImpedance());
     num1 = num1.add(num2);
+    num1 = unit.div(num1);
     elem1.setImpedance(num1);
     elem1.getConnections("left").remove(elem1.getConnections("left").indexOf(elem2));
     if(elem1.getConnections("right").indexOf(elem2) != -1)
       elem1.getConnections("right").remove(elem1.getConnections("right").indexOf(elem2));
+    array.remove(array.indexOf(elem2));
   }
   
   public void replaceSerial(Element elem1, Element elem2)
