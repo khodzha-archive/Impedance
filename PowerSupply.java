@@ -8,9 +8,7 @@ class PowerSupply extends Element
 {
   public PowerSupply()
   {
-    String str = JOptionPane.showInputDialog("Enter maximum voltage");
-    this.voltage_max = Double.parseDouble(str);
-    str = JOptionPane.showInputDialog("Enter frequency");
+    String str = JOptionPane.showInputDialog("Enter frequency");
     this.frequency = Double.parseDouble(str);
     this.impedance = new Complex(0.0, 0.0);
   }
@@ -30,6 +28,5 @@ class PowerSupply extends Element
     g2.fill(circle2);
   }
   
-  private double voltage_max;
   private double frequency;
 }

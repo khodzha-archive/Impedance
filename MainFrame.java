@@ -66,6 +66,8 @@ class MainFrame extends JFrame implements ActionListener
     {
       if(this.check() == true)
       {
+        this.updateImpedance();
+        this.organize();
         this.calculate();
         textField.setVisible(true);
         textField.setText(this.total_impedance.toString());
@@ -109,6 +111,28 @@ class MainFrame extends JFrame implements ActionListener
     }
   }
   
+  public void updateImpedance()
+  {
+    double frequency = ((PowerSupply)array.get(power_element_index)).getFrequency();
+    for(Element elem : array)
+    {
+      if(elem.getClass().getName().equals("Capacity"))
+      {
+        Complex num =new Complex();
+        num.setRe(elem.getImpedance().getRe());
+        num.setIm(elem.getImpedance().getIm() * (1.0/frequency));
+        elem.setImpedance(num);
+      }
+       if(elem.getClass().getName().equals("Inductance"))
+      {
+        Complex num =new Complex();
+        num.setRe(elem.getImpedance().getRe());
+        num.setIm(elem.getImpedance().getIm() * frequency);
+        elem.setImpedance(num);
+      }
+    }
+  }
+  
   public boolean check()
   {
     boolean withPowerSupply = false;
@@ -122,11 +146,13 @@ class MainFrame extends JFrame implements ActionListener
             (Math.pow((elem.getfirstX()-comparison.getsecondX()),2) + Math.pow((elem.getfirstY()-comparison.getsecondY()),2)) < 25)
           {
             elem.setfirstContact(true);
+            elem.addNewConnection(comparison, "first");
           }
           if((Math.pow((elem.getsecondX()-comparison.getfirstX()),2) + Math.pow((elem.getsecondY()-comparison.getfirstY()),2)) < 25 ||
             (Math.pow((elem.getsecondX()-comparison.getsecondX()),2) + Math.pow((elem.getsecondY()-comparison.getsecondY()),2)) < 25)
           {
             elem.setsecondContact(true);
+            elem.addNewConnection(comparison, "second");
           }
         }
       }
@@ -148,158 +174,71 @@ class MainFrame extends JFrame implements ActionListener
       }
     return true;
   }
+  
+  public void organize()
+  {
+    Collections.swap(array, 0, power_element_index);
+    array.get(power_element_index).swapContacts();
+    for(Element element : array)
+    {
+      for(Element elem : element.getConnections("second"))
+      {
+        if(elem.getConnections("second").indexOf(element) != -1 && elem.getConnections("first").indexOf(element) == -1 && elem != array.get(power_element_index))
+        {
+          elem.swapContacts();
+        }
+      }
+    }
+  }
     
   public void calculate()
   {
     double frequency = ((PowerSupply)array.get(power_element_index)).getFrequency();
-    int array_length = array.size();
-    for(int i =0; i < array_length; i++)
-    {
-      findConsequentConnection();
-    }
-    array_length = array.size();
-    for(int i =0; i < array_length; i++)
-    {
-      findParallelConnection();
-    }
+    simplify();
     sumFinalImpedance();
   }
   
-  public void findConsequentConnection()
+  public void simplify()
   {
-     for(Element elem1 : array)
+    while(array.size()>2)
     {
-      for(Element elem2 : array)
+      for(Element elem1 : array)
       {
-        if(elem1 != elem2 && elem1.getClass().getName().equals("PowerSupply") == false && elem2.getClass().getName().equals("PowerSupply") == false)
+        for(Element elem2 : array)
         {
-          if((Math.pow((elem1.getfirstX()-elem2.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem2.getfirstY()),2)) < 25 &&
-            (Math.pow((elem1.getsecondX()-elem2.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem2.getsecondY()),2)) > 25)
+          if(elem1 != elem2)
           {
-            for(Element elem3 : array)
+            if(elem1.getConnections("first").indexOf(elem2) != -1 && elem1.getConnections("second").indexOf(elem2) != -1)
             {
-              if((Math.pow((elem1.getfirstX()-elem3.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem3.getfirstY()),2)) < 25 )
-              {
-                return ;
-              }
+              replaceParallel(elem1,elem2);
             }
-            serial1 = elem1;
-            serial2 = elem2;
-            replaceConsequentConnection();
-            serial1 = null;
-            serial2 = null;
-          }
-           else if((Math.pow((elem1.getfirstX()-elem2.getsecondX()),2) + Math.pow((elem1.getfirstY()-elem2.getsecondY()),2)) < 25 &&
-            (Math.pow((elem1.getsecondX()-elem2.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem2.getfirstY()),2)) > 25)
-          {
-            for(Element elem3 : array)
+            else if(elem1.getConnections("second").indexOf(elem2) !=-1 && elem1.getConnections("second").size() == 1)
             {
-              if((Math.pow((elem1.getfirstX()-elem3.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem3.getfirstY()),2)) < 25  ||
-                (Math.pow((elem1.getfirstX()-elem3.getsecondX()),2) + Math.pow((elem1.getfirstY()-elem3.getsecondY()),2)) < 25)
-              {
-                return ;
-              }
+              replaceSerial(elem1,elem2);
             }
-            serial1 = elem1;
-            serial2 = elem2;
-            replaceConsequentConnection();
-            serial1 = null;
-            serial2 = null;
-          }
-           else if((Math.pow((elem1.getsecondX()-elem2.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem2.getsecondY()),2)) < 25 &&
-            (Math.pow((elem1.getfirstX()-elem2.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem2.getfirstY()),2)) > 25)
-          {
-            for(Element elem3 : array)
-            {
-              if((Math.pow((elem1.getsecondX()-elem3.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem3.getfirstY()),2)) < 25 ||
-                (Math.pow((elem1.getsecondX()-elem3.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem3.getsecondY()),2)) < 25)
-              {
-                return ;
-              }
-            }
-            serial1 = elem1;
-            serial2 = elem2;
-            replaceConsequentConnection();
-            serial1 = null;
-            serial2 = null;
-          }
-          else if((Math.pow((elem1.getsecondX()-elem2.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem2.getfirstY()),2)) < 25 &&
-            (Math.pow((elem1.getfirstX()-elem2.getsecondX()),2) + Math.pow((elem1.getfirstY()-elem2.getsecondY()),2)) > 25)
-          {
-            for(Element elem3 : array)
-            {
-              if((Math.pow((elem1.getsecondX()-elem3.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem3.getfirstY()),2)) < 25 ||
-                (Math.pow((elem1.getsecondX()-elem3.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem3.getsecondY()),2)) < 25)
-              {
-                return ;
-              }
-            }
-            serial1 = elem1;
-            serial2 = elem2;
-            replaceConsequentConnection();
-            serial1 = null;
-            serial2 = null;
           }
         }
       }
     }
   }
   
-  public void findParallelConnection()
+  public void replaceParallel(Element elem1, Element elem2)
   {
-    for(Element elem1 : array)
-    {
-      for(Element elem2 : array)
-      {
-        if(elem1 != elem2 && elem1.getClass().getName().equals("PowerSupply") == false && elem2.getClass().getName().equals("PowerSupply") == false)
-        {
-          if((Math.pow((elem1.getfirstX()-elem2.getfirstX()),2) + Math.pow((elem1.getfirstY()-elem2.getfirstY()),2)) < 25 &&
-            (Math.pow((elem1.getsecondX()-elem2.getsecondX()),2) + Math.pow((elem1.getsecondY()-elem2.getsecondY()),2)) < 25)
-          {
-            parallel1 = elem1;
-            parallel2 = elem2;
-            replaceParallelConnection();
-            parallel1 = null;
-            parallel2 = null;
-          }
-          else if((Math.pow((elem1.getfirstX()-elem2.getsecondX()),2) + Math.pow((elem1.getfirstY()-elem2.getsecondY()),2)) < 25 &&
-            (Math.pow((elem1.getsecondX()-elem2.getfirstX()),2) + Math.pow((elem1.getsecondY()-elem2.getfirstY()),2)) < 25)
-          {
-            parallel1 = elem1;
-            parallel2 = elem2;
-            replaceParallelConnection();
-            parallel1 = null;
-            parallel2 = null;
-          }
-        }
-      }
-    }
+    Complex num1 = new Complex (1, 0);
+    Complex num2 = new Complex (1, 0);
+    num1 = num1.div(elem1.getImpedance());
+    num2 = num2.div(elem2.getImpedance());
+    num1 = num1.add(num2);
+    elem1.setImpedance(num1);
+    elem1.getConnections("left").remove(elem1.getConnections("left").indexOf(elem2));
+    elem1.getConnections("right").remove(elem1.getConnections("right").indexOf(elem2));
   }
   
-  public void replaceConsequentConnection()
+  public void replaceSerial(Element elem1, Element elem2)
   {
-    serial1.setImpedance(serial1.getImpedance().add(serial2.getImpedance()));
-    if(Math.abs(serial1.getfirstX()-serial2.getfirstX())<5)
-      serial1.setsecondX(serial2.getsecondX());
-    else if(Math.abs(serial1.getfirstX()-serial2.getsecondX())<5)
-      serial1.setsecondX(serial2.getfirstX());
-    else if(Math.abs(serial1.getsecondX()-serial2.getfirstX())<5)
-      serial1.setfirstX(serial2.getsecondX());
-    else if(Math.abs(serial1.getsecondX()-serial2.getsecondX())<5)
-      serial1.setfirstX(serial2.getfirstX());
-    array.remove(parallel2);
-    array.trimToSize();
-  }
-  
-  public void replaceParallelConnection()
-  {
-    Complex num = new Complex(1.0, 0.0);
-    Complex a = num.div(parallel1.getImpedance());
-    Complex b = num.div(parallel2.getImpedance());
-    a = a.add(b);
-    parallel1.setImpedance(num.div(a)); //TODO REWRITE to parallel connection
-    array.remove(parallel2);
-    array.trimToSize();
+    elem1.setImpedance(elem1.getImpedance().add(elem2.getImpedance()));
+    elem1.copyConnections(elem2);
+    array.remove(array.indexOf(elem2));
   }
   
   public void sumFinalImpedance()
