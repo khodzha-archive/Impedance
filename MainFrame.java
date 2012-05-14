@@ -194,36 +194,28 @@ class MainFrame extends JFrame implements ActionListener
   public void calculate()
   {
     double frequency = ((PowerSupply)array.get(power_element_index)).getFrequency();
-    simplify();
+    while(array.size()>2)
+      simplify();
     sumFinalImpedance();
   }
   
   public void simplify()
   {
-top:while(array.size()>2)
+top:for(Element elem1 : array)
     {
-      for(Element elem1 : array)
+      for(Element elem2 : array)
       {
-        for(Element elem2 : array)
-        {
-          if(elem1 != elem2 && elem1.getClass().getName().equals("PowerSupply") == false && elem2.getClass().getName().equals("PowerSupply") == false)
+      if(elem1 != elem2 && elem1.getClass().getName().equals("PowerSupply") == false && elem2.getClass().getName().equals("PowerSupply") == false)
+      {
+          if(elem1.getConnections("first").indexOf(elem2) != -1 && elem1.getConnections("second").indexOf(elem2) != -1)
           {
-            if(elem1.getConnections("first").indexOf(elem2) != -1 && elem1.getConnections("second").indexOf(elem2) != -1)
-            {
-              replaceParallel(elem1,elem2);
-              if(array.size() <= 2)
-              {
-            	  break top;
-              }            
-            }
-            else if(elem1.getConnections("second").indexOf(elem2) !=-1 && elem1.getConnections("second").size() == 1)
-            {
-              replaceSerial(elem1,elem2);
-              if(array.size() <= 2)
-              {
-            	  break top;
-              } 
-            }
+            replaceParallel(elem1,elem2);
+            break top;
+          }
+          else if(elem1.getConnections("second").indexOf(elem2) !=-1 && elem1.getConnections("second").size() == 1)
+          {
+            replaceSerial(elem1,elem2);
+            break top;
           }
         }
       }
@@ -239,7 +231,8 @@ top:while(array.size()>2)
     num1 = num1.add(num2);
     elem1.setImpedance(num1);
     elem1.getConnections("left").remove(elem1.getConnections("left").indexOf(elem2));
-    elem1.getConnections("right").remove(elem1.getConnections("right").indexOf(elem2));
+    if(elem1.getConnections("right").indexOf(elem2) != -1)
+      elem1.getConnections("right").remove(elem1.getConnections("right").indexOf(elem2));
   }
   
   public void replaceSerial(Element elem1, Element elem2)
@@ -266,9 +259,5 @@ top:while(array.size()>2)
   private DrawPanel drawPanel;
   private  ArrayList<Element> array;
   private int power_element_index;
-  private Element parallel1;
-  private Element parallel2;
-  private Element serial1;
-  private Element serial2;
   private Complex total_impedance;
 }
