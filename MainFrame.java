@@ -200,21 +200,29 @@ class MainFrame extends JFrame implements ActionListener
   
   public void simplify()
   {
-    while(array.size()>2)
+top:while(array.size()>2)
     {
       for(Element elem1 : array)
       {
         for(Element elem2 : array)
         {
-          if(elem1 != elem2)
+          if(elem1 != elem2 && elem1.getClass().getName().equals("PowerSupply") == false && elem2.getClass().getName().equals("PowerSupply") == false)
           {
             if(elem1.getConnections("first").indexOf(elem2) != -1 && elem1.getConnections("second").indexOf(elem2) != -1)
             {
               replaceParallel(elem1,elem2);
+              if(array.size() <= 2)
+              {
+            	  break top;
+              }            
             }
             else if(elem1.getConnections("second").indexOf(elem2) !=-1 && elem1.getConnections("second").size() == 1)
             {
               replaceSerial(elem1,elem2);
+              if(array.size() <= 2)
+              {
+            	  break top;
+              } 
             }
           }
         }

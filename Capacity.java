@@ -1,6 +1,4 @@
 import javax.swing.*;
-import java.text.*;
-import java.lang.*;
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -8,6 +6,7 @@ class Capacity extends Element
 {
   public Capacity()
   {
+    super();
     String str = JOptionPane.showInputDialog("Enter capacity value");
     this.capacity = Double.parseDouble(str);
     this.impedance = new Complex(0.0, -1.0/this.capacity);

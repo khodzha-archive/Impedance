@@ -8,6 +8,7 @@ class PowerSupply extends Element
 {
   public PowerSupply()
   {
+    super();
     String str = JOptionPane.showInputDialog("Enter frequency");
     this.frequency = Double.parseDouble(str);
     this.impedance = new Complex(0.0, 0.0);

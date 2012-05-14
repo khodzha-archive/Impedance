@@ -8,6 +8,7 @@ class Resistance extends Element
 {
   public Resistance()
   {
+    super();
     String str = JOptionPane.showInputDialog("Enter resistance value");
     this.resistance = Double.parseDouble(str);
     this.impedance = new Complex(this.resistance, 0.0);

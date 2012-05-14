@@ -4,6 +4,12 @@ import java.util.*;
 
 class Element implements MouseListener
 {
+  
+  public Element()
+  {
+    this.first_contact_connections = new ArrayList<Element>();
+    this.second_contact_connections = new ArrayList<Element>();
+  }
   public void Draw(Graphics g)
   {
   }
@@ -103,6 +109,6 @@ class Element implements MouseListener
   private boolean first_contact_connected = false;
   private boolean second_contact_connected = false;
   protected Complex impedance;
-  private  ArrayList<Element> first_contact_connections;
-  private  ArrayList<Element> second_contact_connections;
+  private ArrayList<Element> first_contact_connections;
+  private ArrayList<Element> second_contact_connections;
 }
