@@ -70,6 +70,8 @@ class MainFrame extends JFrame implements ActionListener
         this.organize();
         this.calculate();
         textField.setVisible(true);
+        System.out.println("\n\n-----------------------------------------------------\nTotal impedance:\n");
+        System.out.println(this.total_impedance.toString());
         textField.setText(this.total_impedance.toString());
       }
       else
@@ -195,7 +197,10 @@ class MainFrame extends JFrame implements ActionListener
   {
     double frequency = ((PowerSupply)array.get(power_element_index)).getFrequency();
     while(array.size()>2)
+    {
+      System.out.println(Integer.toString(array.size()));
       simplify();
+    }
     sumFinalImpedance();
   }
   
@@ -232,9 +237,16 @@ top:for(Element elem1 : array)
     num1 = num1.add(num2);
     num1 = unit.div(num1);
     elem1.setImpedance(num1);
-    elem1.getConnections("left").remove(elem1.getConnections("left").indexOf(elem2));
-    if(elem1.getConnections("right").indexOf(elem2) != -1)
-      elem1.getConnections("right").remove(elem1.getConnections("right").indexOf(elem2));
+    for(Element element : array)
+    {
+        if(element != elem2)
+        {
+            if(element.getConnections("left").indexOf(elem2) != -1)
+                element.getConnections("left").remove(element.getConnections("left").indexOf(elem2));
+            if(element.getConnections("right").indexOf(elem2) != -1)
+                element.getConnections("right").remove(element.getConnections("right").indexOf(elem2));
+        }
+    }
     array.remove(array.indexOf(elem2));
   }
   
@@ -242,6 +254,20 @@ top:for(Element elem1 : array)
   {
     elem1.setImpedance(elem1.getImpedance().add(elem2.getImpedance()));
     elem1.copyConnections(elem2);
+    for(Element element : array)
+    {
+        if(element != elem1 && element !=elem2)
+        {
+            if(element.getConnections("left").indexOf(elem2) != -1)
+            {
+                element.getConnections("left").set(element.getConnections("left").indexOf(elem2), elem1);
+            }
+            if(element.getConnections("right").indexOf(elem2) != -1)
+            {
+                element.getConnections("right").set(element.getConnections("right").indexOf(elem2), elem1);
+            }
+        }
+    }
     array.remove(array.indexOf(elem2));
   }
   
